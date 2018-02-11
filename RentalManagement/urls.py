@@ -16,12 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
-from RentalManagementDjango.views import HelloWorld, GuestsViewSet, PlacesViewSet
+from RentalManagementDjango.views import HelloWorld, GuestsViewSet, PlacesViewSet, ReservationsViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'guests', GuestsViewSet)
 router.register(r'places', PlacesViewSet)
+router.register(r'reservations', ReservationsViewSet)
 
 
 urlpatterns = [

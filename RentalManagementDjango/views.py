@@ -2,13 +2,13 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 # Create your views here.
 from django.views import View
 
-from RentalManagementDjango.models import Guest, PlaceToRent
-from RentalManagementDjango.serializers import PersonSerializer, PlaceToRentSerializer
+from RentalManagementDjango.models import Guest, PlaceToRent, Reservation
+from RentalManagementDjango.serializers import PersonSerializer, PlaceToRentSerializer, ReservationSerializer
 
 
 class HelloWorld(View):
@@ -19,11 +19,18 @@ class HelloWorld(View):
 class GuestsViewSet(viewsets.ModelViewSet):
     queryset = Guest.objects.all()
     serializer_class = PersonSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('^name', '^surname')
 
 
 class PlacesViewSet(viewsets.ModelViewSet):
     queryset = PlaceToRent.objects.all()
     serializer_class = PlaceToRentSerializer
+
+
+class ReservationsViewSet(viewsets.ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
 
 
 class Dog:

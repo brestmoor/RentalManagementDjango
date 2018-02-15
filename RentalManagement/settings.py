@@ -27,7 +27,7 @@ SECRET_KEY = '(5&%0s+s4=89eam&piu==_#yuk*-eb%qs#lmj4(2dlz49cdlad'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['filip-rentalmanagement.herokuapp.com']
 
 
 # Application definition

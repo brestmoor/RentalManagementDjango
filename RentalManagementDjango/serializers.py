@@ -20,15 +20,19 @@ class PlaceToRentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ReservationStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReservationStatus
+        fields = '__all__'
+
+
 class ReservationSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
             'from_date': instance.from_date.date(),
             'to_date': instance.to_date.date(),
-            'status': instance.status,
-            'come_date': instance.come_date.date(),
-            'leave_date': instance.leave_date.date(),
+            'status': ReservationStatusSerializer(instance.status).data,
             'advance_payment': instance.advance_payment,
             'no_of_people': instance.no_of_people,
             'person': PersonSerializer(instance.person).data,
@@ -55,9 +59,7 @@ class ReservationSerializer(serializers.BaseSerializer):
         new_reservation = Reservation()
         new_reservation.from_date = datetime.datetime.strptime(validated_data['from_date'], '%Y-%m-%d')
         new_reservation.to_date = datetime.datetime.strptime(validated_data['to_date'], '%Y-%m-%d')
-        new_reservation.status = validated_data['status']
-        new_reservation.come_date = datetime.datetime.strptime(validated_data['come_date'], '%Y-%m-%d')
-        new_reservation.leave_date = datetime.datetime.strptime(validated_data['leave_date'], '%Y-%m-%d')
+        new_reservation.status_id = validated_data['status']['id']
         new_reservation.advance_payment = validated_data['advance_payment']
         new_reservation.no_of_people = validated_data['no_of_people']
         new_reservation.person_id = validated_data['person_id']
@@ -68,12 +70,11 @@ class ReservationSerializer(serializers.BaseSerializer):
     def update(self, instance, validated_data):
         instance.from_date = datetime.datetime.strptime(validated_data['from_date'], '%Y-%m-%d')
         instance.to_date = datetime.datetime.strptime(validated_data['to_date'], '%Y-%m-%d')
-        instance.status = validated_data['status']
-        instance.come_date = datetime.datetime.strptime(validated_data['come_date'], '%Y-%m-%d')
-        instance.leave_date = datetime.datetime.strptime(validated_data['leave_date'], '%Y-%m-%d')
+        instance.status_id = validated_data['status']['id']
         instance.advance_payment = validated_data['advance_payment']
         instance.no_of_people = validated_data['no_of_people']
         instance.person_id = validated_data['person_id']
         instance.place_to_rent_id = validated_data['place_to_rent_id']
         instance.save()
         return instance
+

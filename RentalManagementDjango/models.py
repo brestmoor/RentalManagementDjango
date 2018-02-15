@@ -6,12 +6,12 @@ from django.db import models
 class Guest(models.Model):
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=50)
-    phone = models.IntegerField()
-    email = models.CharField(max_length=50)
-    country = models.CharField(max_length=100)
-    address = models.CharField(max_length=200)
-    plate_numbers = models.CharField(max_length=20)
-    car = models.CharField(max_length=100)
+    phone = models.IntegerField(null=True)
+    email = models.CharField(max_length=50, null=True)
+    country = models.CharField(max_length=100, null=True)
+    address = models.CharField(max_length=200, null=True)
+    plate_numbers = models.CharField(max_length=20, null=True)
+    car = models.CharField(max_length=100, null=True)
 
 
 class PlaceToRent(models.Model):
@@ -19,6 +19,12 @@ class PlaceToRent(models.Model):
     address = models.CharField(max_length=300)
     opened = models.BooleanField(default=True)
     square_m = models.IntegerField()
+    color = models.CharField(max_length=200)
+
+
+class ReservationStatus(models.Model):
+    NOT_CONFIRMED = 'Not confirmed'
+    status = models.CharField(default=NOT_CONFIRMED, max_length=20)
 
 
 class Reservation(models.Model):
@@ -33,11 +39,8 @@ class Reservation(models.Model):
     )
     from_date = models.DateTimeField()
     to_date = models.DateTimeField()
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=NOT_CONFIRMED)
-    come_date = models.DateTimeField()
-    leave_date = models.DateTimeField()
-    advance_payment = models.FloatField()
+    advance_payment = models.FloatField(null=True)
     no_of_people = models.IntegerField()
-
+    status = models.ForeignKey(ReservationStatus, on_delete=models.DO_NOTHING)
     person = models.ForeignKey(Guest, on_delete=models.CASCADE)
     place_to_rent = models.ForeignKey(PlaceToRent, on_delete=models.CASCADE)
